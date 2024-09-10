@@ -91,15 +91,15 @@ export class BookingService {
         booking_date: updateBookingDto.booking_date ? new Date(updateBookingDto.booking_date) : undefined,
         start_time: updateBookingDto.start_time ? new Date(updateBookingDto.start_time) : undefined,
         end_time: updateBookingDto.end_time ? new Date(updateBookingDto.end_time) : undefined,
-        status: role === 'OWNER' ? status : undefined, 
+        status: role === 'OWNER' ? status : undefined, // Only allow status update for owners
       },
     });
 
     return { message: 'Booking updated successfully', data: updatedBooking };
   }
 
-  // Remove (cancel) booking
-  async remove(id: string, userId: string) {
+  // Cancel a booking by updating its status to CANCELLED
+  async cancel(id: string, userId: string) {
     const booking = await this.findOne(id);
 
     // Ensure user is the owner of the booking
@@ -114,11 +114,15 @@ export class BookingService {
       throw new BadRequestException('You can only cancel a booking at least 3 hours before the start time.');
     }
 
-    await this.prisma.booking.delete({
+    // Update booking status to CANCELLED instead of deleting it
+    const cancelledBooking = await this.prisma.booking.update({
       where: { id },
+      data: {
+        status: 'CANCELLED',
+      },
     });
 
-    return { message: 'Booking canceled successfully' };
+    return { message: 'Booking canceled successfully', data: cancelledBooking };
   }
 
   // Find a booking by ID

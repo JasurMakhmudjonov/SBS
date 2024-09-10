@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards, ParseUUIDPipe, Req, Put } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -67,12 +67,12 @@ export class BookingController {
     return this.bookingService.update(id, updateBookingDto, userId, role);
   }
 
-  // Cancel a booking (users)
-  @Delete(':id')
+  // Cancel a booking (users) by updating its status to CANCELLED
+  @Put(':id/cancel')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Cancel a booking' })
-  remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
+  cancel(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
     const userId = req.user.id;
-    return this.bookingService.remove(id, userId);
+    return this.bookingService.cancel(id, userId);
   }
 }
