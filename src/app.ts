@@ -5,13 +5,14 @@ import { PrismaModule } from '@prisma';
 import { UploadModule } from './upload/upload.module';
 import {
   AuthModule,
+  BookingModule,
   CountryModule,
   DistrictModule,
   FieldModule,
   RegionModule,
   ReviewModule,
   SportCategoryModule,
-  UsersModule,
+  UsersModule
 } from '@module';
 
 @Module({
@@ -30,6 +31,7 @@ import {
     FieldModule,
     ReviewModule,
     UploadModule,
+    BookingModule
   ],
   controllers: [],
   providers: [],
