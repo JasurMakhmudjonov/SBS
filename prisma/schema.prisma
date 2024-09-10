@@ -151,6 +151,9 @@ model Reviews {
   @@index([userId])
 }
 
+
+
+
 model Booking {
   id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   booking_date DateTime

@@ -9,6 +9,7 @@ import {
   DistrictModule,
   FieldModule,
   RegionModule,
+  ReviewModule,
   SportCategoryModule,
   UsersModule,
 } from '@module';
@@ -27,6 +28,7 @@ import {
     DistrictModule,
     SportCategoryModule,
     FieldModule,
+    ReviewModule,
     UploadModule,
   ],
   controllers: [],

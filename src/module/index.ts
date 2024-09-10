@@ -4,4 +4,5 @@ export * from './country';
 export * from './region';
 export * from './district';
 export * from './sport-category';
-export * from './field'
+export * from './field';
+export * from './review';
