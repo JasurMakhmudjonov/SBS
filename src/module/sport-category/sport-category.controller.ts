@@ -16,13 +16,13 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role, Roles, RolesGuard } from '@common';
 
 @ApiTags('Sport Categories')
-@ApiBearerAuth()
-@UseGuards(RolesGuard)
 @Controller({ version: '1', path: 'sport-category' })
 export class SportCategoryController {
   constructor(private readonly sportCategoryService: SportCategoryService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @ApiOperation({ summary: 'Create a new sport category' })
   create(@Body() createSportCategoryDto: CreateSportCategoryDto) {
@@ -42,6 +42,8 @@ export class SportCategoryController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @ApiOperation({ summary: 'Update a sport category by ID' })
   update(
@@ -52,6 +54,8 @@ export class SportCategoryController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN)
   @ApiOperation({
     summary: 'Soft delete a sport category by ID (SUPERADMIN only)',

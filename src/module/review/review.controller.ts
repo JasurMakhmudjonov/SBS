@@ -17,13 +17,13 @@ import { Role, Roles, RolesGuard } from '@common';
 import { Request } from 'express';
 
 @ApiTags('Reviews')
-@ApiBearerAuth()
-@UseGuards(RolesGuard)
 @Controller({ version: '1', path: 'reviews' })
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Create a new review (USER only)' })
   create(@Body() createReviewDto: CreateReviewDto, @Req() req: Request) {
@@ -44,6 +44,8 @@ export class ReviewController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Update a review by ID (USER only)' })
   update(
@@ -56,6 +58,8 @@ export class ReviewController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Delete a review by ID (USER only)' })
   remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {

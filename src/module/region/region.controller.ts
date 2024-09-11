@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { RegionService } from './region.service';
 import { CreateRegionDto } from './dto/create-region.dto';
 import { UpdateRegionDto } from './dto/update-region.dto';
@@ -6,13 +16,13 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role, Roles, RolesGuard } from '@common';
 
 @ApiTags('Regions')
-@ApiBearerAuth()
-@UseGuards(RolesGuard)
 @Controller({ version: '1', path: 'region' })
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @ApiOperation({ summary: 'Create a new region' })
   create(@Body() createRegionDto: CreateRegionDto) {
@@ -32,13 +42,20 @@ export class RegionController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @ApiOperation({ summary: 'Update a region by ID' })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateRegionDto: UpdateRegionDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateRegionDto: UpdateRegionDto,
+  ) {
     return this.regionService.update(id, updateRegionDto);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.SUPERADMIN)
   @ApiOperation({ summary: 'Soft delete a region by ID (SUPERADMIN only)' })
   remove(@Param('id', ParseUUIDPipe) id: string) {

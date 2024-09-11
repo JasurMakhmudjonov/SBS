@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, UseGuards, ParseUUIDPipe, Req, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+  ParseUUIDPipe,
+  Req,
+  Put,
+} from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -8,17 +19,17 @@ import { Request } from 'express';
 import { Role } from '@common';
 
 @ApiTags('Bookings')
-@ApiBearerAuth()
-@UseGuards(RolesGuard)
 @Controller({ version: '1', path: 'booking' })
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Create a new booking' })
   create(@Body() createBookingDto: CreateBookingDto, @Req() req: Request) {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     return this.bookingService.create(createBookingDto, userId);
   }
 
@@ -29,6 +40,8 @@ export class BookingController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Get all your bookings' })
   findAllByUser(@Req() req: Request) {
@@ -37,6 +50,8 @@ export class BookingController {
   }
 
   @Get('owner/me')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Get all bookings for your fields (Owner only)' })
   findAllByOwner(@Req() req: Request) {
@@ -51,15 +66,23 @@ export class BookingController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER, Role.OWNER)
   @ApiOperation({ summary: 'Update a booking' })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateBookingDto: UpdateBookingDto, @Req() req: Request) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateBookingDto: UpdateBookingDto,
+    @Req() req: Request,
+  ) {
     const userId = req.user.id;
     const role = req.user.role;
     return this.bookingService.update(id, updateBookingDto, userId, role);
   }
 
   @Put(':id/cancel')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Cancel a booking' })
   cancel(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {

@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseUUIDPipe,
+  Req,
+} from '@nestjs/common';
 import { FieldService } from './field.service';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { UpdateFieldDto } from './dto/update-field.dto';
@@ -7,13 +18,13 @@ import { Role, Roles, RolesGuard } from '@common';
 import { Request } from 'express';
 
 @ApiTags('Fields')
-@ApiBearerAuth()
-@UseGuards(RolesGuard)
 @Controller({ version: '1', path: 'field' })
 export class FieldController {
   constructor(private readonly fieldService: FieldService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Create a new field' })
   create(@Body() createFieldDto: CreateFieldDto, @Req() req: Request) {
@@ -28,6 +39,8 @@ export class FieldController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all fields owned by the current owner' })
   findAllByOwner(@Req() req: Request) {
@@ -42,14 +55,22 @@ export class FieldController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Update a field by ID' })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateFieldDto: UpdateFieldDto, @Req() req: Request) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateFieldDto: UpdateFieldDto,
+    @Req() req: Request,
+  ) {
     const ownerId = req.user.id;
     return this.fieldService.update(id, updateFieldDto, ownerId);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Soft delete a field by ID (OWNER only)' })
   remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
@@ -57,4 +78,3 @@ export class FieldController {
     return this.fieldService.remove(id, ownerId);
   }
 }
-
