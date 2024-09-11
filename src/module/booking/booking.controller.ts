@@ -23,8 +23,7 @@ export class BookingController {
   }
 
   @Get()
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
-  @ApiOperation({ summary: 'Get all bookings (Admin only)' })
+  @ApiOperation({ summary: 'Get all bookings' })
   findAll() {
     return this.bookingService.findAll();
   }
@@ -46,8 +45,7 @@ export class BookingController {
   }
 
   @Get(':id')
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
-  @ApiOperation({ summary: 'Get a booking by ID (Admin only)' })
+  @ApiOperation({ summary: 'Get a booking by ID ' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.bookingService.findOne(id);
   }

@@ -26,3 +26,4 @@ export class AuthController {
     return this.authService.adminLogin(payload);
   }
 }
+
