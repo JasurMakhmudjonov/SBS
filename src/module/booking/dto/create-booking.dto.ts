@@ -22,8 +22,4 @@ export class CreateBookingDto {
   @IsNotEmpty()
   @IsUUID()
   fieldId: string;
-
-  @ApiProperty({ example: BOOKINGSTATUS.PENDING, enum: BOOKINGSTATUS })
-  @IsEnum(BOOKINGSTATUS)
-  status: BOOKINGSTATUS;
 }

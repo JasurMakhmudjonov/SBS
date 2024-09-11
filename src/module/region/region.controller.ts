@@ -20,14 +20,12 @@ export class RegionController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all regions' })
   findAll() {
     return this.regionService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve a specific region by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.regionService.findOne(id);

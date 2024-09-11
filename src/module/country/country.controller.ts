@@ -30,14 +30,12 @@ export class CountryController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all countries' })
   findAll() {
     return this.countryService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve a specific country by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.countryService.findOne(id);

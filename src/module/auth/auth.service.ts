@@ -70,7 +70,7 @@ export class AuthService {
     const user = await this.prisma.users.findUnique({
       where: { phone_number },
     });
-    if (!user || user.role !== 'ADMIN' || user.deletedAt) {
+    if (!user || user.role !== 'ADMIN' && user.role !== 'OWNER' || user.deletedAt) {
       throw new UnauthorizedException('Incorrect phone number or password');
     }
 

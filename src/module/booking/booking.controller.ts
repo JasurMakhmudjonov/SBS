@@ -14,16 +14,14 @@ import { Role } from '@common';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  // Create a new booking (for users)
   @Post()
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Create a new booking' })
   create(@Body() createBookingDto: CreateBookingDto, @Req() req: Request) {
-    const userId = req.user.id; // Get userId from JWT token
+    const userId = req.user.id; 
     return this.bookingService.create(createBookingDto, userId);
   }
 
-  // Get all bookings (for admins)
   @Get()
   @Roles(Role.ADMIN, Role.SUPERADMIN)
   @ApiOperation({ summary: 'Get all bookings (Admin only)' })
@@ -31,7 +29,6 @@ export class BookingController {
     return this.bookingService.findAll();
   }
 
-  // Get bookings for the current user
   @Get('me')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Get all your bookings' })
@@ -40,7 +37,6 @@ export class BookingController {
     return this.bookingService.findAllByUser(userId);
   }
 
-  // Get bookings for the owner's fields
   @Get('owner/me')
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Get all bookings for your fields (Owner only)' })
@@ -49,7 +45,6 @@ export class BookingController {
     return this.bookingService.findAllByOwner(ownerId);
   }
 
-  // Get a booking by ID
   @Get(':id')
   @Roles(Role.ADMIN, Role.SUPERADMIN)
   @ApiOperation({ summary: 'Get a booking by ID (Admin only)' })
@@ -57,7 +52,6 @@ export class BookingController {
     return this.bookingService.findOne(id);
   }
 
-  // Update a booking
   @Patch(':id')
   @Roles(Role.USER, Role.OWNER)
   @ApiOperation({ summary: 'Update a booking' })
@@ -67,7 +61,6 @@ export class BookingController {
     return this.bookingService.update(id, updateBookingDto, userId, role);
   }
 
-  // Cancel a booking (users) by updating its status to CANCELLED
   @Put(':id/cancel')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Cancel a booking' })

@@ -30,14 +30,12 @@ export class SportCategoryController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER, Role.USER)
   @ApiOperation({ summary: 'Retrieve all sport categories' })
   findAll() {
     return this.sportCategoryService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER, Role.USER)
   @ApiOperation({ summary: 'Retrieve a specific sport category by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.sportCategoryService.findOne(id);

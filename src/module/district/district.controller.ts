@@ -20,14 +20,12 @@ export class DistrictController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all districts' })
   findAll() {
     return this.districtService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve a specific district by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.districtService.findOne(id);

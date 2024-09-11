@@ -32,21 +32,19 @@ export class ReviewController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all reviews' })
   findAll() {
     return this.reviewService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve a specific review by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.reviewService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles('USER')
+  @Roles(Role.USER)
   @ApiOperation({ summary: 'Update a review by ID (USER only)' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -58,7 +56,7 @@ export class ReviewController {
   }
 
   @Delete(':id')
-  @Roles('USER')
+  @Roles(Role.USER)
   @ApiOperation({ summary: 'Delete a review by ID (USER only)' })
   remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: Request) {
     const userId = req.user.id;

@@ -22,14 +22,20 @@ export class FieldController {
   }
 
   @Get()
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve all fields' })
   findAll() {
     return this.fieldService.findAll();
   }
 
+  @Get('me')
+  @Roles(Role.OWNER)
+  @ApiOperation({ summary: 'Retrieve all fields owned by the current owner' })
+  findAllByOwner(@Req() req: Request) {
+    const ownerId = req.user.id;
+    return this.fieldService.findAllByOwner(ownerId);
+  }
+
   @Get(':id')
-  @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN, Role.OWNER)
   @ApiOperation({ summary: 'Retrieve a specific field by ID' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.fieldService.findOne(id);
@@ -39,7 +45,7 @@ export class FieldController {
   @Roles(Role.OWNER)
   @ApiOperation({ summary: 'Update a field by ID' })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() updateFieldDto: UpdateFieldDto, @Req() req: Request) {
-    const ownerId = req.user.id; 
+    const ownerId = req.user.id;
     return this.fieldService.update(id, updateFieldDto, ownerId);
   }
 
@@ -51,3 +57,4 @@ export class FieldController {
     return this.fieldService.remove(id, ownerId);
   }
 }
+

@@ -19,8 +19,7 @@ export class FieldService {
   ) {}
 
   async create(createFieldDto: CreateFieldDto, ownerId: string) {
-    const { categoryId, districtId, location, ...rest } =
-      createFieldDto;
+    const { categoryId, districtId, location, ...rest } = createFieldDto;
 
     await this.districtService.findOne(districtId);
     await this.sportCategoryService.findOne(categoryId);
@@ -67,6 +66,22 @@ export class FieldService {
     }
 
     return { message: 'Field found', data: field };
+  }
+
+  // New method for fetching fields owned by the current owner
+  async findAllByOwner(ownerId: string) {
+    const fields = await this.prisma.field.findMany({
+      where: {
+        ownerId: ownerId,
+        deletedAt: null,
+      },
+      include: {
+        category: true,
+        district: true,
+      },
+    });
+
+    return { message: 'Fields for the owner retrieved successfully', data: fields };
   }
 
   async update(id: string, updateFieldDto: UpdateFieldDto, ownerId: string) {

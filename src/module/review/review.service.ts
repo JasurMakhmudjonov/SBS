@@ -11,15 +11,33 @@ import { CreateReviewDto } from './dto/create-review.dto';
 export class ReviewService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private async updateFieldRating(fieldId: string) {
+    const reviews = await this.prisma.reviews.findMany({
+      where: { fieldId, deletedAt: null },
+    });
+
+    const totalReviews = reviews.length;
+    const averageRating = totalReviews
+      ? reviews.reduce((acc, review) => acc + review.rating, 0) / totalReviews
+      : 0;
+
+    const roundedAverageRating = parseFloat(averageRating.toFixed(2));
+
+    await this.prisma.field.update({
+      where: { id: fieldId },
+      data: { rating: roundedAverageRating },
+    });
+  }
+
   async create(userId: string, createReviewDto: CreateReviewDto) {
-    const { fieldId, rating, comment } = createReviewDto;
+    const { fieldId, rating = 5, comment } = createReviewDto; 
 
     const confirmedBooking = await this.prisma.booking.findFirst({
       where: {
         userId: userId,
         fieldId: fieldId,
-        status: 'CONFIRMED', 
-        deletedAt: null,    
+        status: 'CONFIRMED',
+        deletedAt: null,
       },
     });
 
@@ -37,6 +55,8 @@ export class ReviewService {
         userId,
       },
     });
+
+    await this.updateFieldRating(fieldId);
 
     return { message: 'Review created successfully', data: review };
   }
@@ -76,6 +96,8 @@ export class ReviewService {
       },
     });
 
+    await this.updateFieldRating(existingReview.data.fieldId);
+
     return { message: 'Review updated successfully', data: updatedReview };
   }
 
@@ -90,6 +112,8 @@ export class ReviewService {
       where: { id },
       data: { deletedAt: new Date() },
     });
+
+    await this.updateFieldRating(existingReview.data.fieldId);
 
     return { message: 'Review soft deleted successfully', data: deletedReview };
   }

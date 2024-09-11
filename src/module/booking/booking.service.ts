@@ -44,7 +44,6 @@ export class BookingService {
         end_time: new Date(end_time),
         fieldId,
         userId,
-        status: createBookingDto.status || 'PENDING',
       },
     });
 
